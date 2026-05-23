@@ -1,4 +1,4 @@
-// app/merchant/products/page.tsx
+ // app/merchant/products/page.tsx
 "use client";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -9,19 +9,15 @@ import toast from "react-hot-toast";
 const C={blue:"#1a56db",green:"#16a34a",amber:"#d97706",red:"#dc2626",violet:"#7c3aed"};
 const CATS=["All","Electronics","Men Clothing","Female Clothing","Bags - Men","Bags - Women","Kitchen","Kids Clothes","General"];
 
-// ── Product Detail Modal ──────────────────────────────────────
 function ProductModal({ p, inStore, storeProduct, onAdd, onRemove, onClose, acting }:
   { p:any; inStore:boolean; storeProduct:any; onAdd:()=>void; onRemove:()=>void; onClose:()=>void; acting:boolean }) {
 
   const hasImage = p.images?.[0]?.startsWith("http");
   const margin = (p.suggestedRetail??0) > 0 ? Math.round(((p.suggestedRetail - p.basePrice)/p.suggestedRetail)*100) : 20;
 
-
-
   return (
     <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.6)",zIndex:100,display:"flex",alignItems:"flex-end",justifyContent:"center",padding:0,backdropFilter:"blur(4px)"}}>
       <div onClick={e=>e.stopPropagation()} style={{background:"#fff",borderRadius:"20px 20px 0 0",width:"100%",maxWidth:560,maxHeight:"92vh",overflowY:"auto",boxShadow:"0 -8px 40px rgba(0,0,0,.2)"}}>
-        {/* Image */}
         <div style={{position:"relative",height:220,background:"#f3f4f6",overflow:"hidden",borderRadius:"20px 20px 0 0",flexShrink:0}}>
           {hasImage ? (
             <img src={p.images[0]} alt={p.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
@@ -32,7 +28,6 @@ function ProductModal({ p, inStore, storeProduct, onAdd, onRemove, onClose, acti
           <div style={{position:"absolute",bottom:12,left:12,background:"rgba(0,0,0,.5)",borderRadius:99,padding:"3px 10px",fontSize:10,fontWeight:700,color:"#fff",backdropFilter:"blur(4px)"}}>{p.category}</div>
           {p.stock!==undefined&&<div style={{position:"absolute",bottom:12,right:12,background:p.stock>20?"rgba(22,163,74,.8)":p.stock>5?"rgba(217,119,6,.8)":"rgba(220,38,38,.8)",borderRadius:99,padding:"3px 10px",fontSize:10,fontWeight:700,color:"#fff"}}>{p.stock>0?`${p.stock} in stock`:"Out of stock"}</div>}
         </div>
-        {/* Content */}
         <div style={{padding:20}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:10,marginBottom:12,flexWrap:"wrap"}}>
             <div style={{flex:1,minWidth:0}}>
@@ -45,7 +40,6 @@ function ProductModal({ p, inStore, storeProduct, onAdd, onRemove, onClose, acti
             </div>
           </div>
 
-          {/* Pricing breakdown */}
           <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:14}}>
             {[
               {l:"Vendor Cost",  v:`$${(p.basePrice??0).toFixed(2)}`,      c:"#374151"},
@@ -59,13 +53,11 @@ function ProductModal({ p, inStore, storeProduct, onAdd, onRemove, onClose, acti
             ))}
           </div>
 
-          {/* Description */}
           {p.description&&<div style={{marginBottom:14}}>
             <div style={{fontSize:11,fontWeight:700,color:"#6b7280",marginBottom:5,textTransform:"uppercase" as const,letterSpacing:".5px"}}>About this product</div>
             <div style={{fontSize:13,color:"#374151",lineHeight:1.7,background:"#f9fafb",borderRadius:10,padding:"12px 14px",border:"1px solid #e5e7eb"}}>{p.description}</div>
           </div>}
 
-          {/* Tags */}
           {p.tags?.length>0&&<div style={{marginBottom:14}}>
             <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
               {p.tags.map((t:string)=>(
@@ -74,16 +66,15 @@ function ProductModal({ p, inStore, storeProduct, onAdd, onRemove, onClose, acti
             </div>
           </div>}
 
-          {/* Price is fixed by admin — show info only */}
           {inStore&&<div style={{background:"#eff6ff",borderRadius:12,padding:"12px 14px",marginBottom:14,border:`1px solid ${C.blue}30`}}>
             <div style={{fontSize:11,fontWeight:700,color:C.blue,marginBottom:4,textTransform:"uppercase" as const,letterSpacing:".5px"}}>Price (Admin Fixed)</div>
             <div style={{fontFamily:"monospace",fontWeight:900,fontSize:22,color:C.blue}}>${(p.suggestedRetail??p.retailPrice??0).toFixed(2)}</div>
             <div style={{fontSize:11,color:"#6b7280",marginTop:4}}>Price is set by admin · You earn 20% profit = <strong style={{color:C.green}}>${((p.suggestedRetail??p.retailPrice??0)*0.20).toFixed(2)}</strong> per sale</div>
           </div>}
 
-          {/* CTA */}
+          {/* ✅ FIXED — removed duplicate border:"none" */}
           <button onClick={inStore?onRemove:onAdd} disabled={acting}
-            style={{width:"100%",padding:"13px",borderRadius:12,border:"none",fontWeight:700,fontSize:16,cursor:acting?"not-allowed":"pointer",
+            style={{width:"100%",padding:"13px",borderRadius:12,fontWeight:700,fontSize:16,cursor:acting?"not-allowed":"pointer",
               background:inStore?"rgba(220,38,38,.08)":`linear-gradient(135deg,${C.blue},${C.violet})`,
               color:inStore?C.red:"#fff",
               border:inStore?"1.5px solid rgba(220,38,38,.3)":"none",
@@ -100,7 +91,6 @@ function ProductModal({ p, inStore, storeProduct, onAdd, onRemove, onClose, acti
   );
 }
 
-// ── Catalog Product Card ──────────────────────────────────────
 function CatalogCard({ p, inStore, storeProduct, onView, onAdd, onRemove, acting }:
   { p:any; inStore:boolean; storeProduct:any; onView:()=>void; onAdd:()=>void; onRemove:()=>void; acting:boolean }) {
   const [hover,setHover]=useState(false);
@@ -109,7 +99,6 @@ function CatalogCard({ p, inStore, storeProduct, onView, onAdd, onRemove, acting
   return(
     <div onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}
       style={{background:"#fff",border:`${inStore?`2px solid ${C.blue}`:`1px solid #e5e9f5`}`,borderRadius:16,overflow:"hidden",cursor:"pointer",transition:"all .2s",transform:hover?"translateY(-2px)":"none",boxShadow:hover?"0 8px 24px rgba(0,0,0,.1)":inStore?"0 2px 12px rgba(26,86,219,.1)":"none"}}>
-      {/* Image with front/back switcher on hover */}
       {(()=>{
         const imgs=p.images?.filter((i:string)=>i&&i!=="📦").filter((i:string)=>i.startsWith("http"))||[];
         const img1=imgs[0];const img2=imgs[1];
@@ -133,7 +122,6 @@ function CatalogCard({ p, inStore, storeProduct, onView, onAdd, onRemove, acting
           </div>
         );
       })()}
-      {/* Info */}
       <div style={{padding:"12px 14px 10px"}} onClick={onView}>
         <div style={{fontWeight:700,fontSize:14,color:"#111827",marginBottom:2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.name}</div>
         <div style={{fontSize:11,color:"#9ca3af",marginBottom:8}}>{p.vendorName}</div>
@@ -149,7 +137,6 @@ function CatalogCard({ p, inStore, storeProduct, onView, onAdd, onRemove, acting
           </div>
         </div>
       </div>
-      {/* Action button */}
       <div style={{padding:"0 14px 14px"}}>
         <button onClick={e=>{e.stopPropagation();inStore?onRemove():onAdd();}} disabled={acting}
           style={{width:"100%",padding:"9px",borderRadius:10,fontWeight:700,fontSize:13,cursor:acting?"not-allowed":"pointer",transition:"all .15s",
@@ -163,7 +150,6 @@ function CatalogCard({ p, inStore, storeProduct, onView, onAdd, onRemove, acting
   );
 }
 
-// ── My Store Product Card ─────────────────────────────────────
 function StoreCard({ sp, onView, onRemove, acting }:
   { sp:any; onView:()=>void; onRemove:()=>void; acting:boolean }) {
   const [hover,setHover]=useState(false);
@@ -208,7 +194,6 @@ function StoreCard({ sp, onView, onRemove, acting }:
   );
 }
 
-// ── Main Page ─────────────────────────────────────────────────
 export default function ProductsPage(){
   const ctx=useMerchant();
   const params=useSearchParams();
@@ -242,12 +227,10 @@ export default function ProductsPage(){
     setActing(null);
   }
 
-  // Build viewing context (is it a catalog item or store item?)
   const viewingStoreProduct = viewing ? getItem(viewing.id||viewing.productId) : null;
   const viewingInStore = viewing ? hasIt(viewing.id||viewing.productId) : false;
 
   return(<div>
-    {/* Modal */}
     {viewing&&(
       <ProductModal
         p={viewing}
@@ -261,7 +244,6 @@ export default function ProductsPage(){
 
     <div className="fu" style={{marginBottom:18}}>
       <h1 style={{fontWeight:800,fontSize:22,letterSpacing:"-.5px",marginBottom:12}}>Products</h1>
-      {/* Tab switcher */}
       <div style={{display:"flex",background:"#f3f4f6",borderRadius:11,padding:4,marginBottom:16}}>
         {[{id:"mine",l:`My Store (${items.length})`},{id:"catalog",l:`Browse Catalog (${catalog.length})`}].map(t=>(
           <button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,padding:"9px 10px",borderRadius:8,border:"none",cursor:"pointer",fontSize:13,fontWeight:700,background:tab===t.id?"#fff":"transparent",color:tab===t.id?"#111827":"#9ca3af",boxShadow:tab===t.id?"0 1px 3px rgba(0,0,0,.08)":"none"}}>{t.l}</button>
@@ -269,7 +251,6 @@ export default function ProductsPage(){
       </div>
     </div>
 
-    {/* MY STORE TAB */}
     {tab==="mine"&&(
       myLoad?<div style={{textAlign:"center",padding:"60px 0",color:"#9ca3af"}}>Loading…</div>:
       items.length===0?(
@@ -293,7 +274,6 @@ export default function ProductsPage(){
             {items.map((sp:any,i:number)=>(
               <StoreCard key={sp.id} sp={sp}
                 onView={()=>{
-                  // find catalog item for full details
                   const cat_item=catalog.find((c:any)=>c.id===sp.productId);
                   setViewing(cat_item||{id:sp.productId,name:sp.productName,images:[sp.productImage],basePrice:sp.basePrice,suggestedRetail:sp.retailPrice,vendorName:sp.vendorName,category:sp.category,description:"",tags:[]});
                 }}
@@ -305,7 +285,6 @@ export default function ProductsPage(){
       )
     )}
 
-    {/* CATALOG TAB */}
     {tab==="catalog"&&(
       <div>
         <div style={{marginBottom:14}}>
