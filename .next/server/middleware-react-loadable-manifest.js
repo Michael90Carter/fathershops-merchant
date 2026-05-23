@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"app\\\\merchant\\\\wallet\\\\page.tsx -> @/lib/firebase/client\":{\"id\":\"app\\\\merchant\\\\wallet\\\\page.tsx -> @/lib/firebase/client\",\"files\":[]},\"app\\\\merchant\\\\wallet\\\\page.tsx -> firebase/firestore\":{\"id\":\"app\\\\merchant\\\\wallet\\\\page.tsx -> firebase/firestore\",\"files\":[]}}"

@@ -1,0 +1,10 @@
+{
+  "/merchant/dashboard/page": "app/merchant/dashboard/page.js",
+  "/merchant/transactions/page": "app/merchant/transactions/page.js",
+  "/merchant/chat/page": "app/merchant/chat/page.js",
+  "/merchant/products/page": "app/merchant/products/page.js",
+  "/merchant/orders/page": "app/merchant/orders/page.js",
+  "/merchant/wallet/page": "app/merchant/wallet/page.js",
+  "/merchant/stores/page": "app/merchant/stores/page.js",
+  "/merchant/settings/page": "app/merchant/settings/page.js"
+}
